@@ -235,7 +235,7 @@ export default function Home() {
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
           <Image
-            src="/Dyaska12 - Beautiful outdoor grill ❤️_🔥 _ Facebook.jpeg"
+            src="/grill-background.jpeg"
             alt="Мангал в действии"
             fill
             className="object-cover"
