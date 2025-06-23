@@ -1,0 +1,120 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String?
+  image       String?
+  products    Product[]
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("categories")
+}
+
+model Product {
+  id           String       @id @default(cuid())
+  title        String
+  slug         String       @unique
+  description  String?
+  images       String // JSON array of image URLs
+  price        BigInt // price in kopecks
+  oldPrice     BigInt? // old price in kopecks
+  badge        String? // 'new', 'hit', 'sale'
+  specifications String // JSON object
+  inStock      Boolean      @default(true)
+  featured     Boolean      @default(false)
+  
+  // Relations
+  category     Category     @relation(fields: [categoryId], references: [id])
+  categoryId   String
+  orderItems   OrderItem[]
+  
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@map("products")
+}
+
+model Order {
+  id          String      @id @default(cuid())
+  orderNumber String      @unique
+  
+  // Customer info
+  customerName    String
+  customerPhone   String
+  customerEmail   String?
+  customerAddress String?
+  
+  // Order details
+  items       OrderItem[]
+  totalAmount BigInt // total in kopecks
+  status      OrderStatus @default(PENDING)
+  notes       String?
+  
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+
+  @@map("orders")
+}
+
+model OrderItem {
+  id        String  @id @default(cuid())
+  quantity  Int
+  price     BigInt // price at time of order in kopecks
+  
+  // Relations
+  order     Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId   String
+  product   Product @relation(fields: [productId], references: [id])
+  productId String
+
+  @@map("order_items")
+}
+
+model Lead {
+  id          String    @id @default(cuid())
+  name        String
+  phone       String
+  email       String?
+  message     String?
+  source      String    // 'homepage', 'catalog', 'product', etc.
+  productId   String?   // if lead is for specific product
+  status      LeadStatus @default(NEW)
+  
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@map("leads")
+}
+
+enum OrderStatus {
+  PENDING
+  CONFIRMED
+  IN_PRODUCTION
+  READY
+  DELIVERED
+  CANCELLED
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  CONVERTED
+  CLOSED
+}

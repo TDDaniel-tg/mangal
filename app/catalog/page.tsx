@@ -1,0 +1,220 @@
+'use client'
+
+import { useState, useEffect } from 'react'
+import { Header } from '../components/layout/Header'
+import { Footer } from '../components/layout/Footer'
+import { ProductCard } from '../components/features/ProductCard'
+
+import { Loader2 } from 'lucide-react'
+
+interface Category {
+  id: string
+  name: string
+  slug: string
+}
+
+interface DbProduct {
+  id: string
+  title: string
+  slug: string
+  description?: string
+  images: string
+  price: number
+  oldPrice?: number
+  badge?: string
+  specifications: string
+  inStock: boolean
+  featured: boolean
+  categoryId: string
+  createdAt: Date
+  updatedAt: Date
+}
+
+export default function CatalogPage() {
+  const [dbProducts, setDbProducts] = useState<DbProduct[]>([])
+  const [categories, setCategories] = useState<Category[]>([])
+  const [selectedCategory, setSelectedCategory] = useState<string>('all')
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  useEffect(() => {
+    fetchData()
+  }, [])
+
+  const fetchData = async () => {
+    try {
+      setError(null)
+      setLoading(true)
+      
+      const [productsRes, categoriesRes] = await Promise.all([
+        fetch('/api/products', { 
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }),
+        fetch('/api/categories', {
+          method: 'GET', 
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        })
+      ])
+      
+      if (!productsRes.ok || !categoriesRes.ok) {
+        throw new Error('Failed to fetch data')
+      }
+      
+      const productsData = await productsRes.json()
+      const categoriesData = await categoriesRes.json()
+      
+      // Ensure data is arrays
+      const safeProductsData = Array.isArray(productsData) ? productsData : []
+      const safeCategoriesData = Array.isArray(categoriesData) ? categoriesData : []
+      
+      setDbProducts(safeProductsData)
+      setCategories(safeCategoriesData)
+    } catch (error) {
+      console.error('Error fetching data:', error)
+      setError('Ошибка загрузки данных. Попробуйте перезагрузить страницу.')
+      // Set fallback data
+      setDbProducts([])
+      setCategories([])
+    } finally {
+      setLoading(false)
+    }
+  }
+
+  const filteredProducts = selectedCategory === 'all' 
+    ? dbProducts 
+    : dbProducts.filter(product => product?.categoryId === selectedCategory)
+
+  const parseJsonSafely = (jsonString: string, fallback: any = {}) => {
+    try {
+      return JSON.parse(jsonString || '{}')
+    } catch {
+      return fallback
+    }
+  }
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
+        <div className="text-center">
+          <Loader2 className="w-8 h-8 text-fire-500 animate-spin mx-auto mb-4" />
+          <p className="text-gray-300">Загрузка каталога...</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (error) {
+    return (
+      <div className="min-h-screen bg-dark-900">
+        <Header />
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4">
+            <div className="text-center py-16">
+              <h2 className="text-3xl font-oswald text-white mb-4">Ошибка загрузки</h2>
+              <p className="text-gray-300 mb-6">{error}</p>
+              <button
+                onClick={() => fetchData()}
+                className="bg-fire-500 text-white px-6 py-3 rounded-lg hover:bg-fire-600 transition-colors"
+              >
+                Попробовать снова
+              </button>
+            </div>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  return (
+    <div className="min-h-screen bg-dark-900">
+      <Header />
+      
+      <main className="pt-24 pb-16">
+        <div className="container mx-auto px-4">
+          {/* Hero */}
+          <div className="text-center mb-12">
+            <h1 className="text-4xl md:text-6xl font-oswald font-bold text-white mb-6">
+              КАТАЛОГ МАНГАЛОВ
+            </h1>
+            <p className="text-xl text-gray-200 max-w-3xl mx-auto font-medium">
+              Профессиональные мангалы и печи для настоящих мужчин. 
+              Каждое изделие создано для побед на кулинарном поле боя.
+            </p>
+          </div>
+
+          {/* Filters */}
+          <div className="mb-8">
+            <div className="flex flex-wrap gap-4 justify-center">
+              <button
+                onClick={() => setSelectedCategory('all')}
+                className={`px-6 py-3 rounded-lg font-oswald transition-all ${
+                  selectedCategory === 'all'
+                    ? 'bg-fire-500 text-white'
+                    : 'bg-dark-800 text-gray-200 hover:bg-dark-700 font-medium'
+                }`}
+              >
+                ВСЕ ТОВАРЫ
+              </button>
+              {categories.map((category) => (
+                <button
+                  key={category.id}
+                  onClick={() => setSelectedCategory(category.id)}
+                  className={`px-6 py-3 rounded-lg font-oswald transition-all ${
+                    selectedCategory === category.id
+                      ? 'bg-fire-500 text-white'
+                      : 'bg-dark-800 text-gray-200 hover:bg-dark-700 font-medium'
+                  }`}
+                >
+                  {category.name?.toUpperCase() || 'КАТЕГОРИЯ'}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {/* Products Grid */}
+          {filteredProducts.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {filteredProducts.map((product) => {
+                if (!product?.id) return null
+                
+                return (
+                  <ProductCard 
+                    key={product.id} 
+                    product={{
+                      id: product.id,
+                      title: product.title || 'Мангал',
+                      price: Math.round((product.price || 0) / 100), // Convert from kopecks safely
+                      oldPrice: product.oldPrice ? Math.round(product.oldPrice / 100) : undefined,
+                      images: parseJsonSafely(product.images, ['/main.jpg']),
+                      badge: product.badge as 'new' | 'hit' | 'sale' | undefined,
+                      specifications: parseJsonSafely(product.specifications, {}),
+                      inStock: product.inStock ?? true,
+                      category: 'mangaly' as const
+                    }}
+                  />
+                )
+              })}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <h3 className="text-2xl font-oswald text-gray-200 mb-4 font-medium">
+                В этой категории пока нет товаров
+              </h3>
+              <p className="text-gray-400 font-medium">
+                Скоро здесь появятся новые мангалы
+              </p>
+            </div>
+          )}
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  )
+} 
