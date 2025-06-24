@@ -32,6 +32,9 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+.env.local*
+.env.development*
+.env.production*
 
 # vercel
 .vercel
@@ -41,3 +44,35 @@ yarn-error.log*
 next-env.d.ts
 
 /app/generated/prisma
+
+# FILES WITH SECRET KEYS - NEVER COMMIT THESE
+# ============================================
+# Database credentials and connection strings
+DATABASE_CREDENTIALS.md
+database-credentials.*
+db-credentials.*
+secrets.*
+
+# Environment variable files with real values
+env-template.txt
+RAILWAY_VARIABLES.md
+railway-variables.*
+
+# Temporary files that might contain secrets
+temp_env.*
+temp_db.*
+temp_credentials.*
+*.secret
+*.key
+*.pem
+
+# Configuration files with secrets
+config.local.*
+settings.local.*
+credentials.json
+auth-config.*
+
+# Backup files that might contain secrets
+*.backup
+*.bak
+*_backup.*
