@@ -1,7 +1,18 @@
-# ==============================================
-# ОСНОВНЫЕ ПЕРЕМЕННЫЕ ОКРУЖЕНИЯ
-# Мангал Силы - Environment Configuration
-# ==============================================
+# ===================================================
+# ШАБЛОН ПЕРЕМЕННЫХ ОКРУЖЕНИЯ ДЛЯ МАНГАЛ СИЛЫ
+# Environment Variables Template for Mangal Power
+# ===================================================
+# 
+# ИНСТРУКЦИИ:
+# 1. Скопируйте этот файл в .env.local для локальной разработки
+# 2. Замените все значения-заполнители на реальные данные
+# 3. НИКОГДА не коммитьте файлы с реальными секретами в Git!
+#
+# INSTRUCTIONS:
+# 1. Copy this file to .env.local for local development
+# 2. Replace all placeholder values with real data
+# 3. NEVER commit files with real secrets to Git!
+# ===================================================
 
 # -------------------------------------------
 # БАЗА ДАННЫХ (DATABASE)
@@ -12,22 +23,92 @@ DATABASE_URL="file:./prisma/dev.db"
 # Для production (PostgreSQL на Railway/Vercel)
 # DATABASE_URL="postgresql://username:password@host:port/database"
 
+# Для MySQL (PlanetScale)
+# DATABASE_URL="mysql://username:password@host.psdb.cloud/database?sslaccept=strict"
+
 # -------------------------------------------
-# ОКРУЖЕНИЕ (ENVIRONMENT)
+# АУТЕНТИФИКАЦИЯ (AUTHENTICATION)
+# -------------------------------------------
+# Секретный ключ для NextAuth.js (ОБЯЗАТЕЛЬНО!)
+# Сгенерируйте случайный ключ командой: openssl rand -base64 32
+NEXTAUTH_SECRET="your-super-secret-key-here-change-this"
+
+# URL вашего приложения (автоматически на Railway)
+# NEXTAUTH_URL="http://localhost:3000"  # для локальной разработки
+# NEXTAUTH_URL="https://your-app.railway.app"  # для production
+
+# -------------------------------------------
+# ОБЛАЧНОЕ ХРАНИЛИЩЕ (CLOUD STORAGE)
+# -------------------------------------------
+# AWS S3 для загрузки изображений (опционально)
+# AWS_ACCESS_KEY_ID="your-aws-access-key"
+# AWS_SECRET_ACCESS_KEY="your-aws-secret-key"
+# AWS_REGION="us-east-1"
+# AWS_BUCKET_NAME="your-bucket-name"
+
+# Cloudinary для обработки изображений (опционально)
+# CLOUDINARY_CLOUD_NAME="your-cloud-name"
+# CLOUDINARY_API_KEY="your-api-key"
+# CLOUDINARY_API_SECRET="your-api-secret"
+
+# -------------------------------------------
+# EMAIL СЕРВИС (EMAIL SERVICE)
+# -------------------------------------------
+# SMTP для отправки email уведомлений
+# EMAIL_SERVER_HOST="smtp.gmail.com"
+# EMAIL_SERVER_PORT=587
+# EMAIL_SERVER_USER="your-email@gmail.com"
+# EMAIL_SERVER_PASSWORD="your-app-password"
+# EMAIL_FROM="noreply@your-domain.com"
+
+# -------------------------------------------
+# ПЛАТЕЖИ (PAYMENTS)
+# -------------------------------------------
+# Stripe для обработки платежей
+# STRIPE_PUBLISHABLE_KEY="pk_test_..."
+# STRIPE_SECRET_KEY="sk_test_..."
+# STRIPE_WEBHOOK_SECRET="whsec_..."
+
+# Яндекс.Касса (ЮKassa)
+# YOOKASSA_SHOP_ID="your-shop-id"
+# YOOKASSA_SECRET_KEY="your-secret-key"
+
+# -------------------------------------------
+# АНАЛИТИКА (ANALYTICS)
+# -------------------------------------------
+# Google Analytics
+# NEXT_PUBLIC_GA_ID="G-XXXXXXXXXX"
+
+# Яндекс.Метрика
+# NEXT_PUBLIC_YANDEX_METRIKA_ID="your-counter-id"
+
+# -------------------------------------------
+# СОЦИАЛЬНЫЕ СЕТИ (SOCIAL LOGIN)
+# -------------------------------------------
+# Google OAuth
+# GOOGLE_CLIENT_ID="your-google-client-id"
+# GOOGLE_CLIENT_SECRET="your-google-client-secret"
+
+# VK OAuth
+# VK_CLIENT_ID="your-vk-app-id"
+# VK_CLIENT_SECRET="your-vk-secure-key"
+
+# -------------------------------------------
+# РАЗРАБОТКА (DEVELOPMENT)
 # -------------------------------------------
 NODE_ENV="development"
-# Варианты: development, production, test
+
+# Логирование
+# LOG_LEVEL="debug"
 
 # -------------------------------------------
-# NEXT.JS КОНФИГУРАЦИЯ
+# БЕЗОПАСНОСТЬ (SECURITY)
 # -------------------------------------------
-# URL приложения (для production)
-NEXTAUTH_URL="http://localhost:3000"
-# Для production: https://your-domain.com
+# Список разрешенных доменов для CORS
+# ALLOWED_ORIGINS="http://localhost:3000,https://your-domain.com"
 
-# Секретный ключ для NextAuth (генерируйте случайный)
-NEXTAUTH_SECRET="your-secret-key-here-change-in-production"
-# Генерировать можно командой: openssl rand -base64 32
+# API ключи для внешних сервисов
+# EXTERNAL_API_KEY="your-external-api-key"
 
 # -------------------------------------------
 # ЗАГРУЗКА ФАЙЛОВ (FILE UPLOADS)
@@ -40,25 +121,6 @@ ALLOWED_FILE_TYPES="image/jpeg,image/png,image/webp,image/jpg"
 
 # Директория для загрузки файлов (относительно public)
 UPLOAD_DIR="uploads"
-
-# -------------------------------------------
-# БЕЗОПАСНОСТЬ (SECURITY)
-# -------------------------------------------
-# Разрешенные домены для CORS
-ALLOWED_ORIGINS="http://localhost:3000,https://your-domain.com"
-
-# -------------------------------------------
-# ВНЕШНИЕ СЕРВИСЫ (EXTERNAL SERVICES)
-# -------------------------------------------
-# WhatsApp Business API (если используется)
-# WHATSAPP_TOKEN="your-whatsapp-token"
-# WHATSAPP_PHONE="your-phone-number"
-
-# Email сервис (если добавляется в будущем)
-# SMTP_HOST="smtp.gmail.com"
-# SMTP_PORT=587
-# SMTP_USER="your-email@gmail.com"
-# SMTP_PASS="your-app-password"
 
 # -------------------------------------------
 # МОНИТОРИНГ И ЛОГИРОВАНИЕ
