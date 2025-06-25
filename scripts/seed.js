@@ -1,4 +1,4 @@
-import { PrismaClient } from '@prisma/client'
+const { PrismaClient } = require('@prisma/client')
 
 const prisma = new PrismaClient()
 
@@ -52,8 +52,8 @@ async function main() {
           slug: 'mangal-klassik',
           description: 'Классический стальной мангал для дачи',
           images: JSON.stringify(['/images/products/mangal-klassik-1.jpg', '/images/products/mangal-klassik-2.jpg']),
-          price: BigInt(350000), // 3500 рублей в копейках
-          oldPrice: BigInt(400000), // 4000 рублей в копейках
+          price: 350000, // 3500 рублей в копейках
+          oldPrice: 400000, // 4000 рублей в копейках
           badge: 'hit',
           specifications: JSON.stringify({
             material: 'Сталь 3мм',
@@ -74,7 +74,7 @@ async function main() {
           slug: 'gril-professional',
           description: 'Профессиональный угольный гриль для ресторанов',
           images: JSON.stringify(['/images/products/gril-professional-1.jpg']),
-          price: BigInt(1200000), // 12000 рублей в копейках
+          price: 1200000, // 12000 рублей в копейках
           badge: 'new',
           specifications: JSON.stringify({
             material: 'Нержавеющая сталь',
@@ -126,7 +126,7 @@ async function main() {
         customerPhone: '+7 (555) 123-45-67',
         customerEmail: 'alex@example.com',
         customerAddress: 'г. Москва, ул. Примерная, д. 123',
-        totalAmount: BigInt(700000), // 7000 рублей в копейках
+        totalAmount: 700000, // 7000 рублей в копейках
         status: 'PENDING',
         notes: 'Доставка в выходные дни',
         items: {
@@ -134,7 +134,7 @@ async function main() {
             {
               productId: products[0].id,
               quantity: 2,
-              price: BigInt(350000)
+              price: 350000
             }
           ]
         }
@@ -157,4 +157,4 @@ main()
   .catch((e) => {
     console.error(e)
     process.exit(1)
-  })
+  }) 

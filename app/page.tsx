@@ -231,6 +231,90 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Конфигуратор секция */}
+      <section className="section bg-gradient-to-br from-fire-primary/10 via-white to-fire-primary/5">
+        <div className="container">
+          <motion.div
+            initial={{ opacity: 0, y: 30 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center"
+          >
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-oswald font-semibold uppercase tracking-wider text-graphite-900 mb-6">
+              Подберём варианты мангальной зоны по параметрам
+            </h2>
+            <div className="fire-divider mb-8" />
+            
+            <div className="max-w-3xl mx-auto mb-12">
+              <p className="text-lg md:text-xl text-graphite-600 leading-relaxed">
+                Расскажите про ваше место и получите персональные рекомендации с расчетом стоимости. 
+                Наш конфигуратор поможет создать идеальную мангальную зону именно для вашего участка.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+              {[
+                {
+                  number: '01',
+                  title: 'Расскажите о месте',
+                  description: 'Размеры участка, пожелания к функционалу и стилю'
+                },
+                {
+                  number: '02',
+                  title: 'Получите варианты',
+                  description: 'Персональные решения с 3D-визуализацией'
+                },
+                {
+                  number: '03',
+                  title: 'Выберите лучшее',
+                  description: 'Сравните варианты и получите точный расчет'
+                }
+              ].map((step, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6, delay: index * 0.2 }}
+                  viewport={{ once: true }}
+                  className="relative"
+                >
+                  <div className="text-center">
+                    <div className="inline-flex items-center justify-center w-16 h-16 mb-4 rounded-full bg-fire-primary text-white text-xl font-bold">
+                      {step.number}
+                    </div>
+                    <h3 className="text-xl font-oswald font-medium uppercase tracking-wide text-graphite-900 mb-2">
+                      {step.title}
+                    </h3>
+                    <p className="text-graphite-600">{step.description}</p>
+                  </div>
+                  
+                  {index < 2 && (
+                    <div className="hidden md:block absolute top-8 left-full w-full h-0.5 bg-gradient-to-r from-fire-primary to-transparent -translate-x-8" />
+                  )}
+                </motion.div>
+              ))}
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              whileInView={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              viewport={{ once: true }}
+            >
+              <a href="/configurator">
+                <Button variant="primary" size="lg" className="px-12 py-4 text-lg">
+                  Начать
+                </Button>
+              </a>
+              <p className="text-sm text-graphite-500 mt-4">
+                Это бесплатно и займет всего 3 минуты
+              </p>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
       {/* CTA секция */}
       <section className="relative py-20 overflow-hidden">
         <div className="absolute inset-0">
