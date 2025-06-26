@@ -1,62 +1,64 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { writeFile, mkdir } from 'fs/promises'
-import { join } from 'path'
-import { existsSync } from 'fs'
+import { prisma } from '@/app/lib/prisma'
 
 export async function POST(request: NextRequest) {
   try {
-    const data = await request.formData()
-    const file: File | null = data.get('file') as unknown as File
+    const formData = await request.formData()
+    const file = formData.get('file') as File
 
     if (!file) {
-      return NextResponse.json({ error: 'No file uploaded' }, { status: 400 })
-    }
-
-    // Validate file type
-    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/jpg']
-    if (!allowedTypes.includes(file.type)) {
       return NextResponse.json(
-        { error: 'Invalid file type. Only JPEG, PNG, and WebP are allowed.' },
+        { error: 'Файл не найден' },
         { status: 400 }
       )
     }
 
-    // Validate file size (max 10MB)
-    const maxSize = 10 * 1024 * 1024 // 10MB
-    if (file.size > maxSize) {
+    // Проверяем тип файла
+    if (!file.type.startsWith('image/')) {
       return NextResponse.json(
-        { error: 'File too large. Maximum size is 10MB.' },
+        { error: 'Файл должен быть изображением' },
         { status: 400 }
       )
     }
 
+    // Проверяем размер файла (максимум 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json(
+        { error: 'Размер файла не должен превышать 5MB' },
+        { status: 400 }
+      )
+    }
+
+    // Конвертируем файл в Base64
     const bytes = await file.arrayBuffer()
     const buffer = Buffer.from(bytes)
+    const base64 = buffer.toString('base64')
+    const mimeType = file.type
+    
+    // Создаем data URL
+    const dataUrl = `data:${mimeType};base64,${base64}`
 
-    // Create uploads directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads')
-    if (!existsSync(uploadsDir)) {
-      await mkdir(uploadsDir, { recursive: true })
-    }
+    // Сохраняем в базу данных
+    const image = await prisma.image.create({
+      data: {
+        filename: file.name,
+        mimeType: mimeType,
+        size: file.size,
+        data: dataUrl
+      }
+    })
 
-    // Generate unique filename
-    const timestamp = Date.now()
-    const randomString = Math.random().toString(36).substring(2, 15)
-    const extension = file.name.split('.').pop()
-    const filename = `${timestamp}-${randomString}.${extension}`
+    return NextResponse.json({
+      success: true,
+      url: `/api/images/${image.id}`,
+      filename: file.name,
+      id: image.id
+    })
 
-    // Write file
-    const filepath = join(uploadsDir, filename)
-    await writeFile(filepath, buffer)
-
-    // Return the public URL
-    const url = `/uploads/${filename}`
-
-    return NextResponse.json({ url }, { status: 200 })
   } catch (error) {
     console.error('Error uploading file:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Ошибка при загрузке файла' },
       { status: 500 }
     )
   }

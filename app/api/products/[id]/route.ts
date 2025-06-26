@@ -6,9 +6,10 @@ export async function GET(
   { params }: { params: { id: string } }
 ) {
   try {
+    const { id } = await params
     const product = await prisma.product.findUnique({
       where: {
-        id: params.id
+        id: id
       },
       include: {
         category: true
@@ -22,7 +23,14 @@ export async function GET(
       )
     }
 
-    return NextResponse.json(product)
+    // Convert BigInt to numbers for JSON serialization
+    const serializedProduct = {
+      ...product,
+      price: Number(product.price),
+      oldPrice: product.oldPrice ? Number(product.oldPrice) : null
+    }
+
+    return NextResponse.json(serializedProduct)
   } catch (error) {
     console.error('Error fetching product:', error)
     return NextResponse.json(
@@ -37,6 +45,7 @@ export async function PUT(
   { params }: { params: { id: string } }
 ) {
   try {
+    const { id } = await params
     const body = await request.json()
     const {
       title,
@@ -54,7 +63,7 @@ export async function PUT(
 
     const product = await prisma.product.update({
       where: {
-        id: params.id
+        id: id
       },
       data: {
         title,
@@ -74,7 +83,14 @@ export async function PUT(
       }
     })
 
-    return NextResponse.json(product)
+    // Convert BigInt to numbers for JSON serialization
+    const serializedProduct = {
+      ...product,
+      price: Number(product.price),
+      oldPrice: product.oldPrice ? Number(product.oldPrice) : null
+    }
+
+    return NextResponse.json(serializedProduct)
   } catch (error) {
     console.error('Error updating product:', error)
     return NextResponse.json(
@@ -89,17 +105,60 @@ export async function DELETE(
   { params }: { params: { id: string } }
 ) {
   try {
-    await prisma.product.delete({
+    const { id } = await params
+    
+    // Проверяем существование продукта
+    const existingProduct = await prisma.product.findUnique({
       where: {
-        id: params.id
+        id: id
       }
     })
 
-    return NextResponse.json({ success: true })
-  } catch (error) {
+    if (!existingProduct) {
+      return NextResponse.json(
+        { error: 'Товар не найден' },
+        { status: 404 }
+      )
+    }
+
+    // Сначала удаляем все связанные записи в заказах
+    await prisma.orderItem.deleteMany({
+      where: {
+        productId: id
+      }
+    })
+
+    // Теперь удаляем продукт
+    await prisma.product.delete({
+      where: {
+        id: id
+      }
+    })
+
+    return NextResponse.json({ 
+      success: true,
+      message: 'Товар и связанные записи успешно удалены'
+    })
+  } catch (error: any) {
     console.error('Error deleting product:', error)
+    
+    // Проверяем конкретные ошибки Prisma
+    if (error?.code === 'P2025') {
+      return NextResponse.json(
+        { error: 'Товар не найден' },
+        { status: 404 }
+      )
+    }
+    
+    if (error?.code === 'P2014') {
+      return NextResponse.json(
+        { error: 'Невозможно удалить товар, так как он связан с заказами' },
+        { status: 400 }
+      )
+    }
+
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: 'Ошибка при удалении товара' },
       { status: 500 }
     )
   }

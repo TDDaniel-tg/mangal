@@ -106,6 +106,19 @@ model Lead {
   @@map("leads")
 }
 
+model Image {
+  id       String @id @default(cuid())
+  filename String
+  mimeType String
+  size     Int
+  data     String @db.LongText // Base64 data
+  
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("images")
+}
+
 enum OrderStatus {
   PENDING
   CONFIRMED

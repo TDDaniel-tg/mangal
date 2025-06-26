@@ -49,11 +49,18 @@ export default function AdminProductsPage() {
     if (!confirm('Вы уверены, что хотите удалить этот товар?')) return
     
     try {
-      await fetch(`/api/products/${id}`, { method: 'DELETE' })
+      const response = await fetch(`/api/products/${id}`, { method: 'DELETE' })
+      
+      if (!response.ok) {
+        const error = await response.json()
+        throw new Error(error.error || 'Ошибка при удалении товара')
+      }
+      
+      // Обновляем список товаров только если удаление прошло успешно
       setProducts(products.filter(p => p.id !== id))
     } catch (error) {
       console.error('Error deleting product:', error)
-      alert('Ошибка при удалении товара')
+      alert(`Ошибка при удалении товара: ${error.message}`)
     }
   }
 
