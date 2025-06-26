@@ -219,24 +219,76 @@ const generateFeatures = (answers: ConfiguratorQuizState['answers']): string[] =
 }
 
 const getResultImages = (answers: ConfiguratorQuizState['answers']): string[] => {
-  // В реальном проекте здесь была бы логика подбора изображений на основе ответов
-  const images = ['/configurator/result-main.jpg']
+  const images: string[] = []
   
-  if (answers.spaceType === 'kitchen') {
-    images.push('/configurator/kitchen-1.jpg', '/configurator/kitchen-2.jpg')
-  } else if (answers.spaceType === 'complex') {
-    images.push('/configurator/complex-1.jpg', '/configurator/complex-2.jpg')
-  } else {
-    images.push('/configurator/mangal-1.jpg', '/configurator/mangal-2.jpg')
+  // Определяем основное изображение на основе типа
+  const spaceType = answers.spaceType || 'mangal'
+  
+  // Добавляем только ваши изображения для каждого типа
+  if (spaceType === 'mangal') {
+    images.push(
+      'https://landscape3d.ru/img/article/mangalnaya-zona-svoimi-rukami-26.webp',
+      'https://design.pibig.info/uploads/posts/2023-01/1674863816_design-pibig-info-p-kukhnya-ulichnaya-loft-instagram-1.jpg', 
+      'https://i.pinimg.com/736x/38/44/67/384467a687f91da769a52229e471b584.jpg', 
+      'https://design-homes.ru/images/galery/2372/mangalnaya-zona-na-dache_5f3f7157ac92d.jpg',
+      'https://happyhouse.guru/uploads/posts/2023-01/1673421598_happyhouse-guru-p-barbekyu-na-terrase-2.jpg'
+    )
+  } else if (spaceType === 'kitchen') {
+    images.push('https://images.stroistyle.com/posts/84100015-letniaia-kukhnia-s-mangalom-i-kazanom-2.jpg',
+      'https://lh3.googleusercontent.com/proxy/B8mdaM07VfR5SjYIHiQSX1L2t3BIoWgp1p-K2upX3crM6RG1d6l0rUyzTSCEVSXSl8Z27QXen9g88yWKJFRd-0nS6Kd7k2MPc0nE',
+      'https://s3.stroi-news.ru/img/letnyaya-kukhnya-s-barbekyu-vkontakte-3.jpg',
+      'https://i.pinimg.com/736x/b9/73/d1/b973d1be67ab4099c87bbd6363e45f31.jpg',
+      'https://design.pibig.info/uploads/posts/2023-01/1674827738_design-pibig-info-p-mangal-na-kukhne-v-kvartire-vkontakte-3.jpg'
+    ) // Современная уличная кухня
+  } else if (spaceType === 'complex') {
+    images.push('https://metallo-obrabotka24.ru/wp-content/uploads/2020/04/besedka-s-barbekyu2.jpg',
+      'https://st.hzcdn.com/simgs/pictures/terrasy/arbor-bbq-with-a-glass-roof-besedka-so-steklyannoy-kryshey-evamix-img~b621d9ab0e946dfe_14-9808-1-76f2a77.jpg',
+      'https://okna911.ru/sites/default/files/styles/node_1/public/field/image/article-2505-4.jpg?itok=jyNNMlr0',
+      'https://fire-house.ru/wp-content/uploads/2022/08/besedka-dlya-mangala-4.jpg',
+      'https://altanka.com.ua/wp-content/uploads/2018/02/%D0%91%D0%B5%D1%81%D0%B5%D0%B4%D0%BA%D0%B0-%D1%81-%D0%B1%D0%B0%D1%80%D0%B1%D0%B5%D0%BA%D1%8E-%D0%B8%D0%B7-%D0%BA%D0%BE%D0%BC%D0%B1%D0%B8%D0%BD%D0%B8%D1%80%D0%BE%D0%B2%D0%B0%D0%BD%D0%BD%D1%8B%D1%85-%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D0%B8%D0%B0%D0%BB%D0%BE%D0%B2.jpg'
+    ) // Беседка с кухней
   }
   
-  if (answers.canopyType === 'light') {
-    images.push('/configurator/with-canopy.jpg')
-  } else if (answers.canopyType === 'capital') {
-    images.push('/configurator/with-gazebo.jpg')
+  // Возвращаем только реальные изображения без заглушек
+  return images.filter(img => img && img.trim() !== '')
+}
+
+// Функция для получения URL изображений для всех комбинаций
+const getImageUrls = (): Record<string, string> => {
+  return {
+    // ЗОНА С МАНГАЛОМ
+    'mangal-compact-minimalist': 'https://images.unsplash.com/photo-1568563992542-bec6b0b52f4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Маленький современный гриль
+    'mangal-compact-classic': 'https://images.unsplash.com/photo-1571066811602-716837d681de?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классический гриль
+    'mangal-compact-premium': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Премиум гриль на террасе
+    'mangal-standard-minimalist': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Стандартный современный гриль
+    'mangal-standard-classic': 'https://images.unsplash.com/photo-1544025162-d76694265947?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классический гриль с мясом
+    'mangal-standard-premium': 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Гриль у бассейна
+    'mangal-premium-minimalist': 'https://images.unsplash.com/photo-1551632436-cbf8dd35adfa?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Просторная кухня с грилем
+    'mangal-premium-classic': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классическая зона с мангалом
+    'mangal-premium-premium': 'https://images.unsplash.com/photo-1621976498727-9e5d6b16a5e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Роскошная зона с навесом
+    
+    // МАНГАЛЬНАЯ КУХНЯ
+    'kitchen-compact-minimalist': 'https://images.unsplash.com/photo-1554998171-89445e31d4e7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Компактная современная кухня
+    'kitchen-compact-classic': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классическая компактная кухня
+    'kitchen-compact-premium': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Премиум компактная кухня
+    'kitchen-standard-minimalist': 'https://images.unsplash.com/photo-1583847268964-b28dc8f51f92?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Стандартная современная кухня
+    'kitchen-standard-classic': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классическая стандартная кухня
+    'kitchen-standard-premium': 'https://images.unsplash.com/photo-1606107557084-9ba7e2c4c8b7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Премиум стандартная кухня
+    'kitchen-premium-minimalist': 'https://images.unsplash.com/photo-1566737236500-c8ac43014a8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Большая минималистичная кухня
+    'kitchen-premium-classic': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Большая классическая кухня
+    'kitchen-premium-premium': 'https://images.unsplash.com/photo-1560448075-cbc16bb4af8e?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Роскошная большая кухня
+    
+    // КОМПЛЕКСНОЕ РЕШЕНИЕ
+    'complex-compact-minimalist': 'https://images.unsplash.com/photo-1605281317010-fe5ffe798166?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Компактное комплексное решение
+    'complex-compact-classic': 'https://images.unsplash.com/photo-1564013799919-ab600027ffc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классическое комплексное решение
+    'complex-compact-premium': 'https://images.unsplash.com/photo-1621976498727-9e5d6b16a5e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Премиум комплексное решение
+    'complex-standard-minimalist': 'https://images.unsplash.com/photo-1582213782179-e0d53f98f2ca?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Стандартное современное решение
+    'complex-standard-classic': 'https://images.unsplash.com/photo-1560472354-b33ff0c44a43?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Классическое стандартное решение
+    'complex-standard-premium': 'https://images.unsplash.com/photo-1505142468610-359e7d316be0?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Премиум стандартное решение
+    'complex-premium-minimalist': 'https://images.unsplash.com/photo-1556742400-b5c4e93c3095?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Большое современное решение
+    'complex-premium-classic': 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80', // Большое классическое решение
+    'complex-premium-premium': 'https://images.unsplash.com/photo-1621976498727-9e5d6b16a5e3?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80' // Роскошное большое решение
   }
-  
-  return images
 }
 
 const getSimilarProjects = (answers: ConfiguratorQuizState['answers']): Project[] => {

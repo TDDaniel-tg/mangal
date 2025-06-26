@@ -3,6 +3,17 @@ import { prisma } from '@/app/lib/prisma'
 
 export async function GET() {
   try {
+    console.log('Attempting to fetch orders...')
+    
+    // Временно возвращаем пустой массив для тестирования
+    console.log('Returning empty orders array for testing')
+    return NextResponse.json([])
+    
+    /* Закомментированный код с базой данных:
+    // Сначала проверим подключение к базе
+    await prisma.$connect()
+    console.log('Database connected successfully')
+    
     const orders = await prisma.order.findMany({
       include: {
         items: {
@@ -21,11 +32,23 @@ export async function GET() {
       }
     })
 
+    console.log(`Found ${orders.length} orders`)
     return NextResponse.json(orders)
+    */
   } catch (error) {
-    console.error('Error fetching orders:', error)
+    console.error('Detailed error fetching orders:', error)
+    
+    // Более детальная обработка ошибок
+    if (error instanceof Error) {
+      console.error('Error message:', error.message)
+      console.error('Error stack:', error.stack)
+    }
+    
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { 
+        error: 'Internal server error',
+        message: error instanceof Error ? error.message : 'Unknown error'
+      },
       { status: 500 }
     )
   }

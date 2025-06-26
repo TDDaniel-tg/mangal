@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '../../../components/ui/Button'
 import { ImageUpload } from '../../../components/ui/ImageUpload'
+import { ImageWithFallback } from '../../../components/ui/ImageWithFallback'
 import { ArrowLeft, Save, Plus, X } from 'lucide-react'
 
 interface Category {
@@ -409,11 +410,14 @@ export default function NewProductPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                     {formData.images.map((image, index) => (
                       <div key={index} className="relative group">
-                        <img
+                        <div className="relative w-full h-32 rounded-lg border-2 border-gray-200 overflow-hidden">
+                          <ImageWithFallback
                           src={image}
                           alt={`Изображение ${index + 1}`}
-                          className="w-full h-32 object-cover rounded-lg border-2 border-gray-200"
+                            fallbackText={`Фото ${index + 1}`}
+                            className="object-cover"
                         />
+                        </div>
                         <div className="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 transition-opacity rounded-lg flex items-center justify-center">
                           <Button
                             type="button"

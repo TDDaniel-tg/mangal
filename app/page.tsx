@@ -5,7 +5,8 @@ import { Header } from './components/layout/Header'
 import { Footer } from './components/layout/Footer'
 import { HeroSection } from './components/features/HeroSection'
 import { ProductCard } from './components/features/ProductCard'
-import { LeadModal } from './components/features/LeadModal'
+import { LeadForm } from './components/ui/LeadForm'
+import { useLeadForm } from './hooks/useLeadForm'
 import { WhatsAppWidget } from './components/features/WhatsAppWidget'
 import { Button } from './components/ui/Button'
 import { Product } from './types'
@@ -33,7 +34,7 @@ interface DbProduct {
 }
 
 export default function Home() {
-  const [isLeadModalOpen, setIsLeadModalOpen] = useState(false)
+  const leadForm = useLeadForm({ defaultSource: 'homepage' })
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>()
   const [dbProducts, setDbProducts] = useState<DbProduct[]>([])
   const [loading, setLoading] = useState(true)
@@ -68,14 +69,7 @@ export default function Home() {
 
   const handleRequestPrice = (product: Product) => {
     setSelectedProduct(product)
-    setIsLeadModalOpen(true)
-  }
-
-  const handleLeadSubmit = async (data: { name: string; phone: string; message?: string }) => {
-    // Здесь будет отправка данных на сервер
-    console.log('Lead data:', data)
-    // Имитация задержки
-    await new Promise(resolve => setTimeout(resolve, 1000))
+    leadForm.openForm('product', product.id)
   }
 
   // Convert DbProduct to Product for component compatibility
@@ -120,7 +114,7 @@ export default function Home() {
           {
             text: 'Получить консультацию',
             variant: 'ghost',
-            onClick: () => setIsLeadModalOpen(true)
+            onClick: () => leadForm.openForm('hero')
           }
         ]}
       />
@@ -343,7 +337,7 @@ export default function Home() {
             <Button
               variant="primary"
               size="lg"
-              onClick={() => setIsLeadModalOpen(true)}
+              onClick={() => leadForm.openForm('cta')}
             >
               Получить консультацию
             </Button>
@@ -354,21 +348,20 @@ export default function Home() {
       {/* Footer */}
       <Footer />
 
-      {/* Модальное окно заявки */}
-      <LeadModal
-        isOpen={isLeadModalOpen}
+      {/* Форма заявки */}
+      <LeadForm
+        isOpen={leadForm.isOpen}
         onClose={() => {
-          setIsLeadModalOpen(false)
+          leadForm.closeForm()
           setSelectedProduct(undefined)
         }}
-        source="homepage"
-        product={selectedProduct ? {
-          id: selectedProduct.id,
-          name: selectedProduct.title,
-          image: selectedProduct.images[0],
-          price: selectedProduct.price
-        } : undefined}
-        onSubmit={handleLeadSubmit}
+        source={leadForm.source}
+        productId={selectedProduct?.id}
+        title={selectedProduct ? `Узнать цену: ${selectedProduct.title}` : "Получить консультацию"}
+        description={selectedProduct ? 
+          "Оставьте заявку и мы рассчитаем точную стоимость с учетом ваших пожеланий" :
+          "Заполните форму и мы свяжемся с вами в течение 15 минут"
+        }
       />
 
       {/* WhatsApp Widget */}

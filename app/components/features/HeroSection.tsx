@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useEffect, useState } from 'react'
-import Image from 'next/image'
 import { Button } from '../ui/Button'
+import { ImageWithFallback } from '../ui/ImageWithFallback'
 import { ChevronDown } from 'lucide-react'
 import { motion } from 'framer-motion'
 import { cn } from '@/app/lib/utils'
@@ -67,10 +67,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
               <source src={videoUrl} type="video/mp4" />
             </video>
             {/* Fallback image пока видео грузится */}
-            <Image
+            <ImageWithFallback
               src={imageFallback}
               alt="Мангал Силы"
-              fill
+              fallbackText="Мангал Силы"
               className={cn(
                 "object-cover transition-opacity duration-1000",
                 videoLoaded ? "opacity-0" : "opacity-100"
@@ -79,10 +79,10 @@ export const HeroSection: React.FC<HeroSectionProps> = ({
             />
           </>
         ) : (
-          <Image
+          <ImageWithFallback
             src={imageFallback}
             alt="Мангал Силы"
-            fill
+            fallbackText="Мангал Силы"
             className="object-cover"
             priority
           />

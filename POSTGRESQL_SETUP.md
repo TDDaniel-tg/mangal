@@ -124,26 +124,27 @@ npx prisma migrate deploy
 
 
 
-size-2x3.jpg
-size-3x4.jpg
-size-4x5.jpg
-no-canopy.jpg
-light-canopy.jpg
-capital-canopy.jpg
-style-minimal.jpg
-style-classic.jpg
-style-premium.jpg
-result-main.jpg
-result-fallback.jpg
-kitchen-1.jpg
-kitchen-2.jpg
-complex-1.jpg
-complex-2.jpg
-mangal-1.jpg
-mangal-2.jpg
-with-canopy.jpg
-with-gazebo.jpg
-project-1.jpg
-project-2.jpg
-project-3.jpg
-project-fallback.jpg
+📁 /public/configurator/
+├── size-2x3.jpg          # Компактная 2.5×1.5м
+├── size-3x4.jpg          # Стандартная 3.5×2.5м  
+├── size-4x5.jpg          # Просторная 5×3.5м
+├── no-canopy.jpg         # Без навеса
+├── light-canopy.jpg      # Легкий навес
+├── capital-canopy.jpg    # Капитальная беседка
+├── style-minimal.jpg     # Минимализм
+├── style-classic.jpg     # Классический
+├── style-premium.jpg     # Премиум
+├── result-main.jpg       # Главное фото результата
+├── kitchen-1.jpg         # Мангальная кухня
+├── kitchen-2.jpg         # Мангальная кухня 2
+├── mangal-1.jpg          # Простая мангальная зона
+├── mangal-2.jpg          # Простая мангальная зона 2
+├── complex-1.jpg         # Комплексное решение
+├── complex-2.jpg         # Комплексное решение 2
+├── with-canopy.jpg       # С навесом
+└── with-gazebo.jpg       # С беседкой
+
+📁 /public/portfolio/
+├── project-1.jpg         # Семейная кухня
+├── project-2.jpg         # Минималистичная зона
+└── project-3.jpg         # Премиум комплекс

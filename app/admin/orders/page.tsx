@@ -60,10 +60,15 @@ export default function AdminOrdersPage() {
   const fetchOrders = async () => {
     try {
       const response = await fetch('/api/orders')
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`)
+      }
       const data = await response.json()
-      setOrders(data)
+      // Убеждаемся что data является массивом
+      setOrders(Array.isArray(data) ? data : [])
     } catch (error) {
       console.error('Error fetching orders:', error)
+      setOrders([]) // Устанавливаем пустой массив в случае ошибки
     } finally {
       setLoading(false)
     }
@@ -125,9 +130,11 @@ export default function AdminOrdersPage() {
     }).format(price / 100)
   }
 
-  const filteredOrders = statusFilter === 'all' 
-    ? orders 
-    : orders.filter(order => order.status === statusFilter)
+  const filteredOrders = Array.isArray(orders) 
+    ? (statusFilter === 'all' 
+        ? orders 
+        : orders.filter(order => order.status === statusFilter))
+    : []
 
   if (loading) {
     return (

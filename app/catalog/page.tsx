@@ -4,7 +4,9 @@ import { useState, useEffect } from 'react'
 import { Header } from '../components/layout/Header'
 import { Footer } from '../components/layout/Footer'
 import { ProductCard } from '../components/features/ProductCard'
-
+import { LeadForm } from '../components/ui/LeadForm'
+import { useLeadForm } from '../hooks/useLeadForm'
+import { Product } from '../types'
 import { Loader2 } from 'lucide-react'
 
 interface Category {
@@ -36,6 +38,8 @@ export default function CatalogPage() {
   const [selectedCategory, setSelectedCategory] = useState<string>('all')
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const leadForm = useLeadForm({ defaultSource: 'catalog' })
+  const [selectedProduct, setSelectedProduct] = useState<Product | undefined>()
 
   useEffect(() => {
     fetchData()
@@ -97,6 +101,11 @@ export default function CatalogPage() {
     }
   }
 
+  const handleRequestPrice = (product: Product) => {
+    setSelectedProduct(product)
+    leadForm.openForm('catalog-product', product.id)
+  }
+
   if (loading) {
     return (
       <div className="min-h-screen bg-dark-900 flex items-center justify-center">
@@ -126,10 +135,26 @@ export default function CatalogPage() {
             </div>
           </div>
         </main>
-        <Footer />
-      </div>
-    )
-  }
+              <Footer />
+
+      {/* Форма заявки */}
+      <LeadForm
+        isOpen={leadForm.isOpen}
+        onClose={() => {
+          leadForm.closeForm()
+          setSelectedProduct(undefined)
+        }}
+        source={leadForm.source}
+        productId={selectedProduct?.id}
+        title={selectedProduct ? `Узнать цену: ${selectedProduct.title}` : "Получить консультацию"}
+        description={selectedProduct ? 
+          "Оставьте заявку и мы рассчитаем точную стоимость с учетом ваших пожеланий" :
+          "Заполните форму и мы свяжемся с вами в течение 15 минут"
+        }
+      />
+    </div>
+  )
+}
 
   return (
     <div className="min-h-screen bg-dark-900">
@@ -197,6 +222,7 @@ export default function CatalogPage() {
                       inStock: product.inStock ?? true,
                       category: 'mangaly' as const
                     }}
+                    onRequestPrice={handleRequestPrice}
                   />
                 )
               })}

@@ -1,7 +1,7 @@
 import React from 'react'
 import { QuizStep as QuizStepType, QuizOption, ConfiguratorQuizState } from '../../types/configurator'
 import { Check, Star } from 'lucide-react'
-import Image from 'next/image'
+import { ImageWithFallback } from '../../components/ui/ImageWithFallback'
 
 interface QuizStepProps {
   step: QuizStepType
@@ -54,10 +54,10 @@ export const QuizStep: React.FC<QuizStepProps> = ({ step, answers, onAnswer, onT
       <div
         key={option.id}
         onClick={() => handleOptionClick(option)}
-        className={`relative p-4 lg:p-6 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-md ${
+        className={`relative p-4 lg:p-6 rounded-lg border-2 cursor-pointer transition-all duration-200 hover:shadow-lg ${
           selected
-            ? 'border-fire-primary bg-fire-primary/5 shadow-md'
-            : 'border-gray-200 hover:border-gray-300 bg-white'
+            ? 'border-fire-primary bg-fire-primary/20 shadow-lg shadow-fire-primary/20 backdrop-blur-sm'
+            : 'border-slate-600 hover:border-slate-500 bg-slate-700/80 backdrop-blur-sm hover:bg-slate-700/90'
         }`}
       >
         {/* Recommended Badge */}
@@ -83,40 +83,36 @@ export const QuizStep: React.FC<QuizStepProps> = ({ step, answers, onAnswer, onT
           
           {option.visual && option.visual.startsWith('/') && (
             <div className="relative h-32 lg:h-40 mb-4 rounded-lg overflow-hidden">
-              <Image
+              <ImageWithFallback
                 src={option.visual}
                 alt={option.title}
-                fill
+                fallbackText={option.title}
                 className="object-cover"
-                onError={(e) => {
-                  // Fallback если изображение не найдено
-                  e.currentTarget.style.display = 'none'
-                }}
               />
             </div>
           )}
 
           <div className="flex-1">
-            {/* Title and Price */}
-            <div className="flex justify-between items-start mb-2">
-              <h3 className="text-lg lg:text-xl font-oswald font-medium uppercase tracking-wide text-graphite-900">
-                {option.title}
-              </h3>
-              {(option.priceRange || option.price) && (
-                <span className={`text-sm lg:text-base font-semibold ml-2 ${
-                  selected ? 'text-fire-primary' : 'text-gray-600'
-                }`}>
-                  {option.priceRange || option.price}
-                </span>
-              )}
-            </div>
+            {/* Title */}
+            <h3 className="text-lg lg:text-xl font-oswald font-medium uppercase tracking-wide text-white mb-2">
+              {option.title}
+            </h3>
+
+            {/* Price */}
+            {(option.priceRange || option.price) && (
+              <div className={`text-sm lg:text-base font-semibold mb-3 ${
+                selected ? 'text-fire-primary' : 'text-slate-300'
+              }`}>
+                {option.priceRange || option.price}
+              </div>
+            )}
 
             {/* Description */}
-            <p className="text-gray-600 text-sm lg:text-base mb-3">{option.description}</p>
+            <p className="text-slate-300 text-sm lg:text-base mb-3">{option.description}</p>
 
             {/* Additional Info */}
             {option.mangalLength && (
-              <div className="text-xs lg:text-sm text-gray-500">
+              <div className="text-xs lg:text-sm text-slate-400">
                 Длина мангала: {option.mangalLength}
               </div>
             )}
@@ -126,7 +122,7 @@ export const QuizStep: React.FC<QuizStepProps> = ({ step, answers, onAnswer, onT
                 {option.materials.map((material, index) => (
                   <span
                     key={index}
-                    className="inline-block bg-gray-100 text-gray-600 text-xs px-2 py-1 rounded"
+                    className="inline-block bg-slate-600/80 text-slate-200 text-xs px-2 py-1 rounded"
                   >
                     {material}
                   </span>
@@ -140,16 +136,16 @@ export const QuizStep: React.FC<QuizStepProps> = ({ step, answers, onAnswer, onT
   }
 
   return (
-    <div className="bg-white rounded-lg shadow-sm border p-6 lg:p-8">
+    <div className="bg-slate-800/90 backdrop-blur-md rounded-lg shadow-xl border border-white/10 p-6 lg:p-8">
       {/* Question */}
       <div className="text-center mb-8">
-        <h2 className="text-2xl lg:text-3xl font-oswald font-semibold uppercase tracking-wider text-graphite-900 mb-4">
+        <h2 className="text-2xl lg:text-3xl font-oswald font-semibold uppercase tracking-wider text-white mb-4">
           {step.question}
         </h2>
-        <div className="w-16 h-1 bg-fire-primary mx-auto rounded-full" />
+        <div className="w-16 h-1 bg-fire-primary mx-auto rounded-full shadow-lg shadow-fire-primary/50" />
         
         {step.note && (
-          <p className="text-gray-500 text-sm mt-4 max-w-2xl mx-auto">
+          <p className="text-slate-300 text-sm mt-4 max-w-2xl mx-auto">
             {step.note}
           </p>
         )}
@@ -168,8 +164,8 @@ export const QuizStep: React.FC<QuizStepProps> = ({ step, answers, onAnswer, onT
 
       {/* Multi-select hint */}
       {step.type === 'multi-select' && (
-        <div className="mt-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-          <p className="text-blue-700 text-sm text-center">
+        <div className="mt-6 p-4 bg-blue-900/30 border border-blue-500/50 rounded-lg backdrop-blur-sm">
+          <p className="text-blue-300 text-sm text-center">
             💡 Можно выбрать несколько вариантов или пропустить этот шаг
           </p>
         </div>

@@ -1,9 +1,9 @@
 'use client'
 
 import React, { useState } from 'react'
-import Image from 'next/image'
 import { Product } from '@/app/types'
 import { Button } from '../ui/Button'
+import { ImageWithFallback } from '../ui/ImageWithFallback'
 import { Heart, Eye, ChevronLeft, ChevronRight } from 'lucide-react'
 import { cn, formatPrice } from '@/app/lib/utils'
 import { motion } from 'framer-motion'
@@ -53,14 +53,14 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   return (
     <motion.div
       whileHover={{ y: -4 }}
-      className="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300"
+      className="group bg-dark-800 rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 border border-gray-700"
     >
       {/* Image Section */}
       <div className="relative aspect-[4/3] overflow-hidden">
-        <Image
+        <ImageWithFallback
           src={product.images[currentImageIndex]}
           alt={product.title}
-          fill
+          fallbackText={product.title}
           className="object-cover group-hover:scale-105 transition-transform duration-500"
         />
         
@@ -96,11 +96,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         <div className="absolute top-4 right-4 flex flex-col gap-2">
           <button
             onClick={handleFavoriteClick}
-            className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
+            className="w-10 h-10 bg-dark-700/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
           >
             <Heart className={cn(
               "w-5 h-5 transition-colors",
-              isFavorite ? "fill-ember text-ember" : "text-graphite-600"
+              isFavorite ? "fill-ember text-ember" : "text-gray-300"
             )} />
           </button>
           {onQuickView && (
@@ -109,9 +109,9 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 e.stopPropagation()
                 onQuickView(product)
               }}
-              className="w-10 h-10 bg-white rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
+              className="w-10 h-10 bg-dark-700/80 backdrop-blur-sm rounded-full flex items-center justify-center shadow-md hover:shadow-lg transition-shadow"
             >
-              <Eye className="w-5 h-5 text-graphite-600" />
+              <Eye className="w-5 h-5 text-gray-300" />
             </button>
           )}
         </div>
@@ -140,19 +140,19 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
       {/* Content */}
       <div className="p-6">
-        <h3 className="font-oswald font-medium text-xl text-graphite-800 mb-2">
+        <h3 className="font-oswald font-medium text-xl text-white mb-2">
           {product.title}
         </h3>
 
         {/* Specifications */}
         <div className="space-y-1 mb-4">
-          <p className="text-sm text-graphite-600">
+          <p className="text-sm text-gray-300">
             <span className="font-medium">Размеры:</span> {product.specifications.dimensions}
           </p>
-          <p className="text-sm text-graphite-600">
+          <p className="text-sm text-gray-300">
             <span className="font-medium">Материал:</span> {product.specifications.material}
           </p>
-          <p className="text-sm text-graphite-600">
+          <p className="text-sm text-gray-300">
             <span className="font-medium">Гарантия:</span> {product.specifications.warranty}
           </p>
         </div>
@@ -160,7 +160,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Price */}
         <div className="mb-4">
           {product.oldPrice && (
-            <p className="text-sm text-graphite-500 line-through">
+            <p className="text-sm text-gray-400 line-through">
               {formatPrice(product.oldPrice)}
             </p>
           )}
@@ -181,7 +181,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         {/* Stock Status */}
         <p className={cn(
           "text-xs mt-3 text-center",
-          product.inStock ? "text-success" : "text-graphite-500"
+          product.inStock ? "text-success" : "text-gray-400"
         )}>
           {product.inStock ? "✓ В наличии" : "Под заказ"}
         </p>
