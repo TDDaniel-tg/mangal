@@ -41,6 +41,21 @@ export default function CatalogPage() {
   const leadForm = useLeadForm({ defaultSource: 'catalog' })
   const [selectedProduct, setSelectedProduct] = useState<Product | undefined>()
 
+  // Принудительно устанавливаем темную тему для iOS
+  useEffect(() => {
+    document.documentElement.classList.add('dark')
+    document.documentElement.style.colorScheme = 'dark'
+    document.body.style.backgroundColor = '#111827'
+    document.body.style.color = 'white'
+    
+    return () => {
+      document.documentElement.classList.remove('dark')
+      document.documentElement.style.colorScheme = ''
+      document.body.style.backgroundColor = ''
+      document.body.style.color = ''
+    }
+  }, [])
+
   useEffect(() => {
     fetchData()
   }, [])
@@ -108,99 +123,173 @@ export default function CatalogPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-dark-900 flex items-center justify-center">
-        <div className="text-center">
-          <Loader2 className="w-8 h-8 text-fire-500 animate-spin mx-auto mb-4" />
-          <p className="text-gray-300">Загрузка каталога...</p>
+      <>
+        {/* iOS Dark Theme Styles */}
+        <style jsx global>{`
+          html, body {
+            background-color: #111827 !important;
+            color: white !important;
+            color-scheme: dark !important;
+          }
+          @supports (-webkit-appearance: none) {
+            html, body {
+              background-color: #111827 !important;
+              color: white !important;
+            }
+          }
+        `}</style>
+        
+        <div className="min-h-screen flex items-center justify-center" 
+             style={{ backgroundColor: '#111827' }}>
+          <div className="text-center">
+            <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4" style={{ color: '#f97316' }} />
+            <p className="text-gray-300">Загрузка каталога...</p>
+          </div>
         </div>
-      </div>
+      </>
     )
   }
 
   if (error) {
     return (
-      <div className="min-h-screen bg-dark-900">
-        <Header />
-        <main className="pt-24 pb-16">
-          <div className="container mx-auto px-4">
-            <div className="text-center py-16">
-              <h2 className="text-3xl font-oswald text-white mb-4">Ошибка загрузки</h2>
-              <p className="text-gray-300 mb-6">{error}</p>
-              <button
-                onClick={() => fetchData()}
-                className="bg-fire-500 text-white px-6 py-3 rounded-lg hover:bg-fire-600 transition-colors"
-              >
-                Попробовать снова
-              </button>
+      <>
+        {/* iOS Dark Theme Styles */}
+        <style jsx global>{`
+          html, body {
+            background-color: #111827 !important;
+            color: white !important;
+            color-scheme: dark !important;
+          }
+          @supports (-webkit-appearance: none) {
+            html, body {
+              background-color: #111827 !important;
+              color: white !important;
+            }
+          }
+        `}</style>
+        
+        <div className="min-h-screen" style={{ backgroundColor: '#111827' }}>
+          <Header />
+          <main className="pt-24 pb-16">
+            <div className="container mx-auto px-4">
+              <div className="text-center py-16">
+                <h2 className="text-3xl font-oswald text-white mb-4">Ошибка загрузки</h2>
+                <p className="text-gray-300 mb-6">{error}</p>
+                <button
+                  onClick={() => fetchData()}
+                  className="px-6 py-3 rounded-lg text-white transition-colors"
+                  style={{ backgroundColor: '#f97316' }}
+                  onMouseOver={(e) => e.currentTarget.style.backgroundColor = '#ea580c'}
+                  onMouseOut={(e) => e.currentTarget.style.backgroundColor = '#f97316'}
+                >
+                  Попробовать снова
+                </button>
+              </div>
             </div>
-          </div>
-        </main>
-              <Footer />
+          </main>
+          <Footer />
 
-      {/* Форма заявки */}
-      <LeadForm
-        isOpen={leadForm.isOpen}
-        onClose={() => {
-          leadForm.closeForm()
-          setSelectedProduct(undefined)
-        }}
-        source={leadForm.source}
-        productId={selectedProduct?.id}
-        title={selectedProduct ? `Узнать цену: ${selectedProduct.title}` : "Получить консультацию"}
-        description={selectedProduct ? 
-          "Оставьте заявку и мы рассчитаем точную стоимость с учетом ваших пожеланий" :
-          "Заполните форму и мы свяжемся с вами в течение 15 минут"
-        }
-      />
-    </div>
-  )
-}
+          {/* Форма заявки */}
+          <LeadForm
+            isOpen={leadForm.isOpen}
+            onClose={() => {
+              leadForm.closeForm()
+              setSelectedProduct(undefined)
+            }}
+            source={leadForm.source}
+            productId={selectedProduct?.id}
+            title={selectedProduct ? `Узнать цену: ${selectedProduct.title}` : "Получить консультацию"}
+            description={selectedProduct ? 
+              "Оставьте заявку и мы рассчитаем точную стоимость с учетом ваших пожеланий" :
+              "Заполните форму и мы свяжемся с вами в течение 15 минут"
+            }
+          />
+        </div>
+      </>
+    )
+  }
 
   return (
-    <div className="min-h-screen bg-dark-900">
-      <Header />
+    <>
+      {/* iOS Dark Theme Styles */}
+      <style jsx global>{`
+        html, body {
+          background-color: #111827 !important;
+          color: white !important;
+          color-scheme: dark !important;
+        }
+        @supports (-webkit-appearance: none) {
+          html, body {
+            background-color: #111827 !important;
+            color: white !important;
+          }
+        }
+      `}</style>
       
-      <main className="pt-24 pb-16">
-        <div className="container mx-auto px-4">
-          {/* Hero */}
-          <div className="text-center mb-12">
-            <h1 className="text-4xl md:text-6xl font-oswald font-bold text-white mb-6">
-              КАТАЛОГ МАНГАЛОВ
-            </h1>
-            <p className="text-xl text-gray-200 max-w-3xl mx-auto font-medium">
-              Профессиональные мангалы и печи для настоящих мужчин. 
-              Каждое изделие создано для побед на кулинарном поле боя.
-            </p>
-          </div>
-
-          {/* Filters */}
-          <div className="mb-8">
-            <div className="flex flex-wrap gap-4 justify-center">
-              <button
-                onClick={() => setSelectedCategory('all')}
-                className={`px-6 py-3 rounded-lg font-oswald transition-all ${
-                  selectedCategory === 'all'
-                    ? 'bg-fire-500 text-white'
-                    : 'bg-dark-800 text-gray-200 hover:bg-dark-700 font-medium'
-                }`}
-              >
-                ВСЕ ТОВАРЫ
-              </button>
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setSelectedCategory(category.id)}
-                  className={`px-6 py-3 rounded-lg font-oswald transition-all ${
-                    selectedCategory === category.id
-                      ? 'bg-fire-500 text-white'
-                      : 'bg-dark-800 text-gray-200 hover:bg-dark-700 font-medium'
-                  }`}
-                >
-                  {category.name?.toUpperCase() || 'КАТЕГОРИЯ'}
-                </button>
-              ))}
+      <div className="min-h-screen" style={{ backgroundColor: '#111827' }}>
+        <Header />
+        
+        <main className="pt-24 pb-16">
+          <div className="container mx-auto px-4">
+            {/* Hero */}
+            <div className="text-center mb-12">
+              <h1 className="text-4xl md:text-6xl font-oswald font-bold text-white mb-6">
+                КАТАЛОГ МАНГАЛОВ
+              </h1>
+              <p className="text-xl text-gray-200 max-w-3xl mx-auto font-medium">
+                Профессиональные мангалы и печи для настоящих мужчин. 
+                Каждое изделие создано для побед на кулинарном поле боя.
+              </p>
             </div>
-          </div>
+
+            {/* Filters */}
+            <div className="mb-8">
+              <div className="flex flex-wrap gap-4 justify-center">
+                <button
+                  onClick={() => setSelectedCategory('all')}
+                  className="px-6 py-3 rounded-lg font-oswald transition-all text-white"
+                  style={{ 
+                    backgroundColor: selectedCategory === 'all' ? '#f97316' : '#1f2937',
+                    color: 'white'
+                  }}
+                  onMouseOver={(e) => {
+                    if (selectedCategory !== 'all') {
+                      e.currentTarget.style.backgroundColor = '#374151'
+                    }
+                  }}
+                  onMouseOut={(e) => {
+                    if (selectedCategory !== 'all') {
+                      e.currentTarget.style.backgroundColor = '#1f2937'
+                    }
+                  }}
+                >
+                  ВСЕ ТОВАРЫ
+                </button>
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setSelectedCategory(category.id)}
+                    className="px-6 py-3 rounded-lg font-oswald transition-all text-white"
+                    style={{ 
+                      backgroundColor: selectedCategory === category.id ? '#f97316' : '#1f2937',
+                      color: 'white'
+                    }}
+                    onMouseOver={(e) => {
+                      if (selectedCategory !== category.id) {
+                        e.currentTarget.style.backgroundColor = '#374151'
+                      }
+                    }}
+                    onMouseOut={(e) => {
+                      if (selectedCategory !== category.id) {
+                        e.currentTarget.style.backgroundColor = '#1f2937'
+                      }
+                    }}
+                  >
+                    {category.name?.toUpperCase() || 'КАТЕГОРИЯ'}
+                  </button>
+                ))}
+              </div>
+            </div>
 
           {/* Products Grid */}
           {filteredProducts.length > 0 ? (
@@ -240,7 +329,24 @@ export default function CatalogPage() {
         </div>
       </main>
 
-      <Footer />
-    </div>
+        <Footer />
+
+        {/* Форма заявки */}
+        <LeadForm
+          isOpen={leadForm.isOpen}
+          onClose={() => {
+            leadForm.closeForm()
+            setSelectedProduct(undefined)
+          }}
+          source={leadForm.source}
+          productId={selectedProduct?.id}
+          title={selectedProduct ? `Узнать цену: ${selectedProduct.title}` : "Получить консультацию"}
+          description={selectedProduct ? 
+            "Оставьте заявку и мы рассчитаем точную стоимость с учетом ваших пожеланий" :
+            "Заполните форму и мы свяжемся с вами в течение 15 минут"
+          }
+        />
+      </div>
+    </>
   )
 } 

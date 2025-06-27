@@ -26,7 +26,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'premium',
     price: 'от 75 000 ₽',
     description: 'Премиальный мангал из нержавеющей стали с дымоходом и рабочим столом',
-    image: '/main.jpg',
+    image: 'https://whogrill.ru/upload/resize_cache/webp/iblock/ea7/gril-dacha.webp',
     features: ['Нержавеющая сталь 5мм', 'Дымоход', 'Рабочий стол', 'Ящик для угля'],
     location: 'Московская область',
     year: '2024'
@@ -37,7 +37,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'standard',
     price: 'от 35 000 ₽',
     description: 'Классический мангал для семейных посиделок на даче',
-    image: '/main.jpg',
+    image: 'https://realstroyservice.kiev.ua/images/blog/1672487024_happyhouse-guru-p-sovremennii-mangal-krasivo-64.jpg',
     features: ['Сталь 3мм', 'Складные ножки', 'Регулируемая высота'],
     location: 'Подмосковье',
     year: '2024'
@@ -48,7 +48,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'complex',
     price: 'от 120 000 ₽',
     description: 'Полноценная кулинарная зона с мангалом, грилем и рабочей поверхностью',
-    image: '/main.jpg',
+    image: 'https://hobbyka.ru/upload/medialibrary/519/519c7143fda3be4df5c9288c6a5ee237.jpg',
     features: ['Кирпичная кладка', 'Встроенный гриль', 'Мойка', 'Столешница из камня'],
     location: 'Рублево-Успенское',
     year: '2023'
@@ -59,7 +59,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'portable',
     price: 'от 15 000 ₽',
     description: 'Компактный разборный мангал для выездов на природу',
-    image: '/main.jpg',
+    image: 'https://gala-shop.by/upload/dev2fun.imagecompress/webp/resize_cache/iblock/7dd/500_500_1/zvifrdoymm28ri96qqattcznbhkwll1j.webp',
     features: ['Разборная конструкция', 'Легкий алюминий', 'Кейс для переноски'],
     location: 'Москва',
     year: '2024'
@@ -70,7 +70,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'commercial',
     price: 'от 200 000 ₽',
     description: 'Профессиональный мангал для ресторанов и кафе',
-    image: '/main.jpg',
+    image: 'https://profitex.ua/wp-content/uploads/2020/01/290.jpg',
     features: ['Нержавеющая сталь', 'Промышленная вытяжка', 'Система подачи газа'],
     location: 'Центр Москвы',
     year: '2023'
@@ -81,7 +81,7 @@ const portfolioData: PortfolioItem[] = [
     category: 'standard',
     price: 'от 25 000 ₽',
     description: 'Надежный мангал для постоянного использования на даче',
-    image: '/main.jpg',
+    image: 'https://cdn.poryadok.ru/upload/medialibrary/cd6/cd68e9157ac02c90ecff03fed10da1c2.jpg',
     features: ['Сталь 3мм', 'Антикоррозийное покрытие', 'Съемная решетка'],
     location: 'Калужская область',
     year: '2024'
