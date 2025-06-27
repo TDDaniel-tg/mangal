@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Button } from './Button'
-import { Phone, Mail, MessageSquare, X } from 'lucide-react'
+import { Phone, MessageSquare, X } from 'lucide-react'
 
 interface LeadFormProps {
   source: string
@@ -22,7 +22,6 @@ export const LeadForm: React.FC<LeadFormProps> = ({
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    email: '',
     message: ''
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -61,7 +60,6 @@ export const LeadForm: React.FC<LeadFormProps> = ({
         setFormData({
           name: '',
           phone: '',
-          email: '',
           message: ''
         })
         // Автоматически закрываем форму через 3 секунды
@@ -154,25 +152,7 @@ export const LeadForm: React.FC<LeadFormProps> = ({
                   </div>
                 </div>
 
-                {/* Email */}
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Email
-                  </label>
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                      <Mail className="h-4 w-4 text-gray-400" />
-                    </div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-fire-primary focus:border-transparent"
-                      placeholder="your@email.com"
-                    />
-                  </div>
-                </div>
+
 
                 {/* Message */}
                 <div>
