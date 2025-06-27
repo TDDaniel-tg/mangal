@@ -38,6 +38,19 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     }
+  },
+  viewport: {
+    width: 'device-width',
+    initialScale: 1,
+    viewportFit: 'cover'
+  },
+  other: {
+    'apple-mobile-web-app-capable': 'yes',
+    'apple-mobile-web-app-status-bar-style': 'black-translucent',
+    'format-detection': 'telephone=no',
+    'theme-color': '#111827',
+    'msapplication-TileColor': '#111827',
+    'apple-mobile-web-app-title': 'Мангал Силы'
   }
 };
 
@@ -48,6 +61,31 @@ export default function RootLayout({
 }) {
   return (
     <html lang="ru">
+      <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="theme-color" content="#111827" />
+        <meta name="msapplication-navbutton-color" content="#111827" />
+        <meta name="apple-mobile-web-app-title" content="Мангал Силы" />
+        <meta name="format-detection" content="telephone=no" />
+        
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @media (prefers-color-scheme: light) {
+              :root {
+                color-scheme: dark;
+              }
+            }
+            
+            @supports (-webkit-touch-callout: none) {
+              body {
+                -webkit-text-size-adjust: 100%;
+                -webkit-tap-highlight-color: transparent;
+              }
+            }
+          `
+        }} />
+      </head>
       <body className="antialiased">{children}</body>
     </html>
   );
